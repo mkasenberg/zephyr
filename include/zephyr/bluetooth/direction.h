@@ -118,7 +118,7 @@ struct bt_df_per_adv_sync_iq_samples_report {
 	uint16_t per_evt_counter;
 	/** Number of IQ samples in report. */
 	uint8_t sample_count;
-	/** Pinter to IQ samples data. */
+	/** Pointer to IQ samples data. */
 	struct bt_hci_le_iq_sample const *sample;
 };
 
