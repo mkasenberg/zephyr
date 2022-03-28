@@ -59,8 +59,11 @@ static K_SEM_DEFINE(sem_per_sync_lost, 0, 1);
 //const static uint8_t ant_patterns[] = { 0x1, 0x2, 0x3, 0x4, 0x5,
 //					0x6, 0x7, 0x8, 0x9, 0xA };
 //const static uint8_t ant_patterns[] = { 0x8, 0x8, 0x8, 0x8, 0x8 }; // A0, A0, A0, A0
-const static uint8_t ant_patterns[] = { 0x8, 0x8, 0xd, 0x8, 0xd }; // A0, A1, A0, A1
-//const static uint8_t ant_patterns[] = { 0x8, 0x8, 0xd, 0x8, 0x8 }; // A0, A1, A0, A0
+//const static uint8_t ant_patterns[] = { 0x8, 0x8, 0xd, 0x8, 0xd }; // A6, A7, A6, A7
+//const static uint8_t ant_patterns[] = { 0x8, 0x8, 0xd, 0x8, 0x8 }; // A6, A7, A6, A6
+//const static uint8_t ant_patterns[] = { 0x8, 0x8, 0x8, 0xd, 0x8 }; // A6, A6, A7, A6
+const static uint8_t ant_patterns[] = { 0x8, 0x8, 0xd, 0x8, 0xa }; // A6, A7, A6, A5
+//const static uint8_t ant_patterns[] = { 0x8, 0x8, 0xd, 0x8, 0xe }; // A6, A7, A6, A8
 //const static uint8_t ant_patterns[] = { 0x1, 0x2, 0x3, 0x4, 0x5,
 //					0x6, 0x7, 0x8, 0x9, 0xA };
 #endif /* CONFIG_BT_DF_CTE_RX_AOA */
@@ -232,7 +235,7 @@ static void recv_cb(struct bt_le_per_adv_sync *sync,
 #define WDT_NODE DT_INST(0, nxp_imx_wdog)
 #endif
 
-#define WDT_MAX_WINDOW 5000U  // milliseconds
+#define WDT_MAX_WINDOW 8000U  // milliseconds
 #define WDT_FEED_TRIES 5
 #define WDT_ALLOW_CALLBACK 1
 /*
