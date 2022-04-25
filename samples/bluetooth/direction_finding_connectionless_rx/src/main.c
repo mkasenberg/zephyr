@@ -62,10 +62,12 @@ static K_SEM_DEFINE(sem_per_sync_lost, 0, 1);
 //const static uint8_t ant_patterns[] = { 0x8, 0x8, 0xd, 0x8, 0xd }; // A6, A7, A6, A7
 //const static uint8_t ant_patterns[] = { 0x8, 0x8, 0xd, 0x8, 0x8 }; // A6, A7, A6, A6
 //const static uint8_t ant_patterns[] = { 0x8, 0x8, 0x8, 0xd, 0x8 }; // A6, A6, A7, A6
-const static uint8_t ant_patterns[] = { 0x8, 0x8, 0xd, 0x8, 0xa }; // A6, A7, A6, A5
+//const static uint8_t ant_patterns[] = { 0x8, 0x8, 0xd, 0x8, 0xa }; // A6, A7, A6, A5
 //const static uint8_t ant_patterns[] = { 0x8, 0x8, 0xd, 0x8, 0xe }; // A6, A7, A6, A8
 //const static uint8_t ant_patterns[] = { 0x1, 0x2, 0x3, 0x4, 0x5,
 //					0x6, 0x7, 0x8, 0x9, 0xA };
+//const static uint8_t ant_patterns[] = { 0x6, 0x6, 0x4, 0x6, 0x4 }; // A2, A3, A2, A3
+const static uint8_t ant_patterns[] = { 0x6, 0x4, 0x6, 0x6, 0x6, 0x5, 0x6, 0x6, 0x6 }; // A2 A3 A2 A2 A2 A1 A2 A2 A2
 #endif /* CONFIG_BT_DF_CTE_RX_AOA */
 
 static bool data_cb(struct bt_data *data, void *user_data);
@@ -214,13 +216,13 @@ static void recv_cb(struct bt_le_per_adv_sync *sync,
 #define WDT_MAX_WINDOW  100U
 #elif DT_HAS_COMPAT_STATUS_OKAY(st_stm32_watchdog)
 #define WDT_NODE DT_INST(0, st_stm32_watchdog)
-#elif DT_HAS_COMPAT_STATUS_OKAY(nordic_nrf_watchdog)
+#elif DT_HAS_COMPAT_STATUS_OKAY(nordic_nrf_wdt)
 /* Nordic supports a callback, but it has 61.2 us to complete before
  * the reset occurs, which is too short for this sample to do anything
  * useful.  Explicitly disallow use of the callback.
  */
 #define WDT_ALLOW_CALLBACK 0
-#define WDT_NODE DT_INST(0, nordic_nrf_watchdog)
+#define WDT_NODE DT_INST(0, nordic_nrf_wdt)
 #elif DT_HAS_COMPAT_STATUS_OKAY(espressif_esp32_watchdog)
 #define WDT_NODE DT_INST(0, espressif_esp32_watchdog)
 #elif DT_HAS_COMPAT_STATUS_OKAY(silabs_gecko_wdog)
