@@ -31,14 +31,14 @@ LOG_MODULE_REGISTER(LOG_MODULE_NAME, CONFIG_BTTESTER_LOG_LEVEL);
 
 #define BT_LE_AD_DISCOV_MASK (BT_LE_AD_LIMITED | BT_LE_AD_GENERAL)
 #define ADV_BUF_LEN (sizeof(struct btp_gap_device_found_ev) + 2 * 31)
-
+// XD
 #if defined(CONFIG_BT_EXT_ADV)
 static struct bt_le_ext_adv *ext_adv;
 #endif
 
 static atomic_t current_settings;
 struct bt_conn_auth_cb cb;
-static uint8_t oob_legacy_tk[16] = { 0 };
+static uint8_t oob_legacy_tk[16] = { 0 }
 
 #if !defined(CONFIG_BT_SMP_OOB_LEGACY_PAIR_ONLY)
 static struct bt_le_oob oob_sc_local = { 0 };
