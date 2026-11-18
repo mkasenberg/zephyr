@@ -38,6 +38,24 @@
 
 LOG_MODULE_REGISTER(bttester_bap_audio_stream, CONFIG_BTTESTER_LOG_LEVEL);
 
+/* TEST ONLY: once audio is sent or received, keep logging until reset, to test the RTT logger */
+static uint32_t log_spam_cnt;
+
+static void log_spam_handler(struct k_work *work)
+{
+	LOG_INF("Log spam %u", log_spam_cnt++);
+	k_work_reschedule(k_work_delayable_from_work(work), K_MSEC(10));
+}
+
+static K_WORK_DELAYABLE_DEFINE(log_spam_work, log_spam_handler);
+
+void btp_bap_audio_stream_log_spam_start(void)
+{
+	if (log_spam_cnt == 0U && !k_work_delayable_is_pending(&log_spam_work)) {
+		k_work_schedule(&log_spam_work, K_NO_WAIT);
+	}
+}
+
 /** Enqueue at least 2 buffers per stream, but otherwise equal distribution based on the buf count*/
 #define MAX_ENQUEUE_CNT MAX(2, (CONFIG_BT_ISO_TX_BUF_COUNT / CONFIG_BT_ISO_MAX_CHAN))
 
@@ -221,6 +239,8 @@ bool btp_bap_audio_stream_can_send(struct btp_bap_audio_stream *stream)
 
 void btp_bap_audio_stream_sent_cb(struct bt_bap_stream *stream)
 {
+	btp_bap_audio_stream_log_spam_start();
+
 	for (size_t i = 0U; i < ARRAY_SIZE(tx_streams); i++) {
 		if (tx_streams[i].bap_stream == stream) {
 			const atomic_val_t old = atomic_dec(&tx_streams[i].enqueued);

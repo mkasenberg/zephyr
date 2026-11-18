@@ -75,6 +75,7 @@ bool btp_bap_audio_stream_can_send(struct btp_bap_audio_stream *stream);
  * @param stream The stream that completed TX
  */
 void btp_bap_audio_stream_sent_cb(struct bt_bap_stream *stream);
+void btp_bap_audio_stream_log_spam_start(void);
 
 /* Generate 310 octets of mock data going 0x00, 0x01, ..., 0xff, 0x00, 0x01, ..., 0xff, etc
  * For 2 x 155 = 310 octets is used as the maximum number of channels per stream defined by BAP is 2

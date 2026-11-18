@@ -835,6 +835,8 @@ static void stream_recv_cb(struct bt_bap_stream *stream, const struct bt_iso_rec
 {
 	struct btp_bap_unicast_stream *u_stream = stream_bap_to_unicast(stream);
 
+	btp_bap_audio_stream_log_spam_start();
+
 	if (u_stream->already_sent == false) {
 		/* For now, send just a first packet, to limit the number
 		 * of logs and not unnecessarily spam through btp.
