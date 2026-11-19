@@ -815,6 +815,28 @@ int tester_gap_create_adv_instance(struct bt_le_adv_param *param,
 
 static struct bt_le_ext_adv *gap_ext_adv;
 
+/* DO NOT MERGE: crash the IUT on purpose, to test auto-pts.
+ * 1 - crash in the Start Advertising command, before the response
+ * 2 - crash 3 s after the advertising has started
+ * Select with -DEXTRA_CFLAGS=-DTESTER_CRASH_MODE=1
+ */
+#ifndef TESTER_CRASH_MODE
+#define TESTER_CRASH_MODE 2
+#endif
+
+static void crash(void)
+{
+	printk("Crashing on purpose\n");
+	*(volatile int *)0 = 0;
+}
+
+static void crash_handler(struct k_work *work)
+{
+	crash();
+}
+
+static K_WORK_DELAYABLE_DEFINE(crash_work, crash_handler);
+
 static uint8_t start_advertising(const void *cmd, uint16_t cmd_len,
 				 void *rsp, uint16_t *rsp_len)
 {
@@ -828,6 +850,10 @@ static uint8_t start_advertising(const void *cmd, uint16_t cmd_len,
 	uint8_t sd_len;
 	int err;
 	int i;
+
+	if (TESTER_CRASH_MODE == 1) {
+		crash();
+	}
 
 	/* This command is very unfortunate since after variable data there is
 	 * additional 5 bytes (4 bytes for duration, 1 byte for own address
@@ -890,6 +916,10 @@ static uint8_t start_advertising(const void *cmd, uint16_t cmd_len,
 
 	atomic_set_bit(&current_settings, BTP_GAP_SETTINGS_ADVERTISING);
 	rp->current_settings = sys_cpu_to_le32(current_settings);
+
+	if (TESTER_CRASH_MODE == 2) {
+		k_work_schedule(&crash_work, K_SECONDS(3));
+	}
 
 	*rsp_len = sizeof(*rp);
 	return BTP_STATUS_SUCCESS;
